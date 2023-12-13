@@ -305,6 +305,7 @@ fork(void)
 
   pid = np->pid;
 
+  np->tm = p->tm;
   release(&np->lock);
 
   acquire(&wait_lock);
@@ -653,4 +654,18 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+uint64 unusedprocs(void){
+  uint64 count = 0;
+  struct proc *p;
+
+  for(p = proc; p < &proc[NPROC]; p++) {
+    // acquire(&p->lock);
+    if(p->state != UNUSED) {
+      count++;
+    } 
+    // release(&p->lock);
+  }
+  return count;  
 }
